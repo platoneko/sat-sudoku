@@ -8,9 +8,10 @@
 #include "solver.h"
 #include "display.h"
 
+#define MASK_PROB 0.6f
+
 
 extern int board[9][9];
-static const float MASK_PROB = 0.6;
 
 
 void shuffle(int *array, size_t n) {
@@ -31,7 +32,7 @@ void newSudoku() {
     shuffle(array, 9);
     for (int i=0; i<9; ++i) {
         for (int j=0; j<9; ++j) {
-            if ((float)rand()/RAND_MAX > 0.6) {
+            if ((float)rand()/RAND_MAX > MASK_PROB) {
                 board[i][j] = array[board[i][j] - 1];
             } else {
                 board[i][j] = 0;
