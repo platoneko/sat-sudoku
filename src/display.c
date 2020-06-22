@@ -41,7 +41,7 @@ void menu() {
 
 void loadBoard() {
     char filepath[1024];
-    int temp;
+    int temp, row[9][10] = {0}, column[9][10] = {0}, block[3][3][10] = {0};
     printf("Please input sudoku file path:\n");
     scanf("%s", filepath);
     FILE *fp = fopen(filepath, "r");
@@ -57,6 +57,23 @@ void loadBoard() {
                 exit(-1);
             }
             board[i][j] = temp;
+            if (temp > 0) {
+                if (row[i][temp]) {
+                    printf("Row conflict detected at (%d, %d)!\n", i, j);
+                    exit(-1);
+                }
+                row[i][temp] = 1;
+                if (column[j][temp]) {
+                    printf("Column conflict detected at (%d, %d)!\n", i, j);
+                    exit(-1);
+                }
+                column[j][temp] = 1;
+                if (block[i/3][j/3][temp]) {
+                    printf("Block conflict detected at (%d, %d)!\n", i, j);
+                    exit(-1);
+                }
+                block[i/3][j/3][temp] = 1;
+            }
         }
     }
 }
