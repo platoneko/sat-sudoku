@@ -96,7 +96,7 @@ void printBoard() {
 }
 
 void play() {
-    // newSudoku();
+    newSudoku();
     printBoard();
     printf("\nPress Any Key to Get Solution.\n");
     if (getchar()) {

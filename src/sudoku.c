@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
+
 #include "sudoku.h"
 #include "cnfparser.h"
 #include "solver.h"
@@ -9,6 +9,34 @@
 
 
 extern int board[9][9];
+static const float MASK_PROB = 0.6;
+
+
+void shuffle(int *array, size_t n) {
+    if (n > 1)  {
+        size_t i;
+        for (i = 0; i < n - 1; i++) {
+          size_t j = i + rand() / (RAND_MAX / (n - i) + 1);
+          int t = array[j];
+          array[j] = array[i];
+          array[i] = t;
+        }
+    }
+}
+
+void newSudoku() {
+    int array[9] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    shuffle(array, 9);
+    for (int i=0; i<9; ++i) {
+        for (int j=0; j<9; ++j) {
+            if ((float)rand()/RAND_MAX > 0.6) {
+                board[i][j] = array[board[i][j] - 1];
+            } else {
+                board[i][j] = 0;
+            }
+        }
+    }
+}
 
 void toCNF() {
     int temp1, temp2;
@@ -102,8 +130,8 @@ void toSudoku() {
 
 void saveSolution(const char *filename) {
     FILE *fp = fopen(filename, "w");
-    for (int i=0; i<0; ++i) {
-        fprintf(fp, " %d", board[i][0]);
+    for (int i=0; i<9; ++i) {
+        fprintf(fp, "%d", board[i][0]);
         for (int j=1; j<9; ++j) {
             fprintf(fp, " %d", board[i][j]);
         }
